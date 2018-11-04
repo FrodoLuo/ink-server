@@ -1,8 +1,8 @@
 import { Injectable, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'entity/user.entity';
 import { Repository } from 'typeorm';
 import * as nodeUUID from 'node-uuid';
+import { User } from '../entity/user.entity';
 
 @Injectable()
 export class UserService {

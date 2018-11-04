@@ -1,11 +1,7 @@
 import { Controller, Get, Post, UseGuards, HttpException, HttpStatus, Body, Query, HttpCode } from '@nestjs/common';
-import { Article } from 'entity/article.entity';
-import { User } from 'entity/user.entity';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { HeaderValue } from 'decorators/user.decorator';
-import { ArticleService } from 'service/article.service';
-import { AuthorizationGuard } from 'guard/authorization.guard';
+import { HeaderValue } from '../../decorators/user.decorator';
+import { ArticleService } from '../../service/article.service';
+import { AuthorizationGuard } from '../../guard/authorization.guard';
 
 interface ArticleParams {
   title: string;

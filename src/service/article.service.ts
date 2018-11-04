@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Article } from 'entity/article.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from './user.service';
+import { Article } from '../entity/article.entity';
 
-import { saveFile } from 'utils/file';
+import { saveFile } from '../utils/file';
 
 @Injectable()
 export class ArticleService {
