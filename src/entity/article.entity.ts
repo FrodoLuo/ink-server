@@ -21,6 +21,6 @@ export class Article {
   @Column()
   tags: string;
 
-  @Column()
+  @Column({length: 1024})
   brief: string;
 }
