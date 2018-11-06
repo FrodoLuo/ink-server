@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from './user.service';
@@ -23,6 +23,13 @@ export class ArticleService {
       },
     });
   }
+  public getArticleById(id: number) {
+    return this.articleRepository.findOne({
+      where: {
+        id,
+      },
+    });
+  }
   public async saveArticles(content: string, tags: string, title: string, token: string) {
     let article = this.articleRepository.create();
 
@@ -35,7 +42,12 @@ export class ArticleService {
     // file save
     article = await this.articleRepository.save(article);
     article.mdUrl = `data/md/${article.user.id}/${article.id}.md`;
-    this.articleRepository.save(article);
-    return saveFile(`data/md/${article.user.id}`, `${article.id}.md`, content);
+    try {
+      await saveFile(`data/md/${article.user.id}`, `${article.id}.md`, content);
+      article = await this.articleRepository.save(article);
+    } catch (err) {
+      throw new HttpException(err, 500);
+    }
+    return article;
   }
 }

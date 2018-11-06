@@ -1,4 +1,4 @@
-import { Controller, Get, Post, UseGuards, HttpException, HttpStatus, Body, Query, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, UseGuards, HttpException, HttpStatus, Body, Query, HttpCode, Param } from '@nestjs/common';
 import { HeaderValue } from '../../decorators/user.decorator';
 import { ArticleService } from '../../service/article.service';
 import { AuthorizationGuard } from '../../guard/authorization.guard';
@@ -24,17 +24,17 @@ export class ArticlesController {
       return await this.articleService.getAllArticles();
     }
   }
+  @Get('/:id')
+  async getArticle(@Param('id') id: number) {
+    return await this.articleService.getArticleById(id);
+  }
 
   @Post()
   @UseGuards(AuthorizationGuard)
   @HttpCode(200)
   async postArticle(@HeaderValue('authorization') token: string, @Body() article: ArticleParams) {
     if (article.content === undefined || article.tags === undefined) { throw new HttpException('Param not enough', HttpStatus.BAD_REQUEST); }
-    const status = await this.articleService.saveArticles(article.content, article.tags, article.title, token);
-    if (status.success) {
-      return 'success';
-    } else {
-      throw new HttpException(status.err, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    const articleSaved = await this.articleService.saveArticles(article.content, article.tags, article.title, token);
+    return articleSaved;
   }
 }
