@@ -2,7 +2,7 @@ import { Controller, Get, Post, UseGuards, HttpException, HttpStatus, Body, Quer
 import { HeaderValue } from '../../decorators/user.decorator';
 import { ArticleService } from '../../service/article.service';
 import { AuthorizationGuard } from '../../guard/authorization.guard';
-import { Article } from 'entity/article.entity';
+import { Article } from '../../entity/article.entity';
 
 interface ArticleParams {
   title: string;

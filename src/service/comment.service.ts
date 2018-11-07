@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Comment } from 'entity/comment.entity';
 import { Repository } from 'typeorm';
+import { Comment } from '../entity/comment.entity';
 
 @Injectable()
 export class CommentService {
@@ -14,6 +14,9 @@ export class CommentService {
     return await this.commentRepository.find({
       skip: page * 10,
       take: 10,
+      order: {
+        updateDate: 'DESC',
+      },
     });
   }
 
