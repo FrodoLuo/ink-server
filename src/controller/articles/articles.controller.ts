@@ -1,7 +1,8 @@
-import { Controller, Get, Post, UseGuards, HttpException, HttpStatus, Body, Query, HttpCode, Param } from '@nestjs/common';
+import { Controller, Get, Post, UseGuards, HttpException, HttpStatus, Body, Query, HttpCode, Param, Delete, Patch } from '@nestjs/common';
 import { HeaderValue } from '../../decorators/user.decorator';
 import { ArticleService } from '../../service/article.service';
 import { AuthorizationGuard } from '../../guard/authorization.guard';
+import { Article } from 'entity/article.entity';
 
 interface ArticleParams {
   title: string;
@@ -27,6 +28,19 @@ export class ArticlesController {
   @Get('/:id')
   async getArticle(@Param('id') id: number) {
     return await this.articleService.getArticleById(id);
+  }
+  @Delete('/:id')
+  @UseGuards(AuthorizationGuard)
+  async deleteArticle(@HeaderValue('authorization') token: string, @Param('id') id: number) {
+    return await this.articleService.deleteArticleById(token, id);
+  }
+
+  @Patch()
+  @UseGuards(AuthorizationGuard)
+  @HttpCode(200)
+  async modifyArticle(@HeaderValue('authorization') token: string, @Body() article: Article) {
+    const articleSaved = await this.articleService.modifyArticle(article, token);
+    return articleSaved;
   }
 
   @Post()

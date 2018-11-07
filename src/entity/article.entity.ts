@@ -23,4 +23,7 @@ export class Article {
 
   @Column({length: 1024})
   brief: string;
+
+  @Column({default: false})
+  deleted: boolean;
 }
