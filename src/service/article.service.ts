@@ -14,10 +14,12 @@ export class ArticleService {
     private userService: UserService,
   ) { }
 
-  public getAllArticles(token?: string) {
+  public getAllArticles(page: number, token?: string) {
     return this.articleRepository.find({
       where: token ? { token, deleted: false } : { deleted: false },
       relations: ['user'],
+      skip: page * 10,
+      take: 10,
       order: {
         updateDate: 'DESC',
       },

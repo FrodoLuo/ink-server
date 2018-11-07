@@ -1,19 +1,21 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Post, Query, HttpCode, Body } from '@nestjs/common';
+import { CommentService } from 'service/comment.service';
 
 @Controller('comments')
 export class CommentsController {
 
+  constructor(
+    private commentService: CommentService,
+  ) { }
+
   @Get()
-  getComments(@Query() articleId: number) {
-    return [
-      {
-        author: {
-          avatarURL: '/assets/img/Holo.full.191598.jpg',
-          name: 'frodoluo',
-        },
-        content: 'This is a comment',
-        updateDate: new Date(),
-      },
-    ];
+  public async getComments(@Query('page') page: number) {
+    return await this.commentService.getComments(page);
+  }
+
+  @Post()
+  @HttpCode(200)
+  public async postComment(@Body('author') author: string, @Body('content') content: string) {
+    return await this.commentService.postComment(author, content);
   }
 }
