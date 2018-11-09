@@ -5,6 +5,7 @@ import { UserService } from './user.service';
 import { Article } from '../entity/article.entity';
 
 import { saveFile } from '../utils/file';
+import { ErrorException, DeniedException } from 'exceptions';
 
 @Injectable()
 export class ArticleService {
@@ -30,6 +31,7 @@ export class ArticleService {
       where: {
         id,
       },
+      relations: ['user'],
     });
   }
   public async saveArticles(content: string, tags: string, title: string, token: string) {
@@ -40,20 +42,19 @@ export class ArticleService {
     article.title = title;
     article.user = await this.userService.findByToken(token);
     article.mdUrl = '';
-    article.brief = content.split(/\r\n|\r|\n/).slice(0, 8).join('\n');
+    article.brief = content.split(/\r\n|\r|\n/).slice(0, 6).join('\n');
     // file save
     article = await this.articleRepository.save(article);
     article.mdUrl = `data/md/${article.user.id}/${article.id}.md`;
     try {
       await saveFile(`data/md/${article.user.id}`, `${article.id}.md`, content);
-      article = await this.articleRepository.save(article);
+      return await this.articleRepository.save(article);
     } catch (err) {
-      throw new HttpException(err, 500);
+      throw new ErrorException(err);
     }
-    return article;
   }
 
-  public async modifyArticle(article: Article, token: string) {
+  public async modifyArticle(article: Article, content: string, token: string) {
     const verified = !! await this.articleRepository.findOne({
       where: {
         user: await this.userService.findByToken(token),
@@ -61,9 +62,15 @@ export class ArticleService {
       },
     });
     if (verified) {
-      return this.articleRepository.save(article);
+      try {
+        article.brief = content.split(/\r\n|\r|\n/).slice(0, 6).join('\n');
+        await saveFile(`data/md/${article.user.id}`, `${article.id}.md`, content);
+        return this.articleRepository.save(article);
+      } catch (err) {
+        throw new ErrorException(err);
+      }
     } else {
-      throw new HttpException({ message: 'denied' }, 401);
+      throw new DeniedException();
     }
   }
 

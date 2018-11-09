@@ -38,8 +38,8 @@ export class ArticlesController {
   @Patch()
   @UseGuards(AuthorizationGuard)
   @HttpCode(200)
-  async modifyArticle(@HeaderValue('authorization') token: string, @Body() article: Article) {
-    const articleSaved = await this.articleService.modifyArticle(article, token);
+  async modifyArticle(@HeaderValue('authorization') token: string, @Body('article') article: Article, @Body('content') content: string) {
+    const articleSaved = await this.articleService.modifyArticle(article, content, token);
     return articleSaved;
   }
 
@@ -48,7 +48,6 @@ export class ArticlesController {
   @HttpCode(200)
   async postArticle(@HeaderValue('authorization') token: string, @Body() article: ArticleParams) {
     if (article.content === undefined || article.tags === undefined) { throw new HttpException('Param not enough', HttpStatus.BAD_REQUEST); }
-    const articleSaved = await this.articleService.saveArticles(article.content, article.tags, article.title, token);
-    return articleSaved;
+    return await this.articleService.saveArticles(article.content, article.tags, article.title, token);
   }
 }
