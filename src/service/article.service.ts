@@ -5,7 +5,7 @@ import { UserService } from './user.service';
 import { Article } from '../entity/article.entity';
 
 import { saveFile } from '../utils/file';
-import { ErrorException, DeniedException } from 'exceptions';
+import { ErrorException, DeniedException } from '../exceptions';
 
 @Injectable()
 export class ArticleService {
