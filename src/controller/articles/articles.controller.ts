@@ -18,11 +18,16 @@ export class ArticlesController {
   ) { }
 
   @Get()
-  async getArticles(@Query('user') user: boolean, @Query('page') page: number, @HeaderValue('authorization') token?: string) {
+  async getArticles(
+    @Query('user') user: boolean,
+    @Query('page') page: number,
+    @Query('keyword') keyword?: string,
+    @HeaderValue('authorization') token?: string,
+  ) {
     if (user) {
-      return await this.articleService.getAllArticles(page, token);
+      return await this.articleService.getAllArticles(page, keyword, token);
     } else {
-      return await this.articleService.getAllArticles(page);
+      return await this.articleService.getAllArticles(page, keyword);
     }
   }
   @Get('/:id')
