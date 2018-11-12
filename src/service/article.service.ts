@@ -17,7 +17,8 @@ export class ArticleService {
 
   public getAllArticles(page: number, keyword?: string, token?: string) {
     let query = this.articleRepository.createQueryBuilder('article')
-      .leftJoinAndSelect('article.user', 'user');
+      .leftJoinAndSelect('article.user', 'user')
+      .where('article.deleted = false');
     if (token) {
       query = query.where('user.token = :token', { token });
     }
