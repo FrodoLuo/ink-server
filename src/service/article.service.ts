@@ -16,7 +16,6 @@ export class ArticleService {
   ) { }
 
   public getAllArticles(page: number, keyword?: string, token?: string) {
-    console.log(keyword, token);
     let query = this.articleRepository.createQueryBuilder('article')
       .leftJoinAndSelect('article.user', 'user');
     if (token) {
@@ -25,19 +24,10 @@ export class ArticleService {
     if (keyword) {
       query = query.where('article.tags LIKE :keyword or article.title like :keyword', { keyword: `%${keyword}%` });
     }
-    console.log(query.getSql());
+    query = query.orderBy('article.updateDate', 'DESC')
+      .skip((page || 0) * 10)
+      .take(10);
     return query.getMany();
-    // return this.articleRepository.find({
-    //   where: {
-    //     ...token ? { token, deleted: false } : { deleted: false },
-    //   },
-    //   relations: ['user'],
-    //   skip: page * 10,
-    //   take: 10,
-    //   order: {
-    //     updateDate: 'DESC',
-    //   },
-    // });
   }
   public getArticleById(id: number) {
     return this.articleRepository.findOne({
