@@ -72,6 +72,7 @@ export class ArticleService {
         await saveFile(`data/md/${article.user.id}`, `${article.id}.md`, content);
         return this.articleRepository.save(article);
       } catch (err) {
+        console.log(err);
         throw new ErrorException(err);
       }
     } else {
