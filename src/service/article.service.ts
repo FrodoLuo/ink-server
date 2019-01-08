@@ -67,7 +67,7 @@ export class ArticleService {
     });
     if (verified) {
       try {
-        article.updateDate = null;
+        article.updateDate = new Date();
         article.brief = content.split(/\r\n|\r|\n/).slice(0, 6).join('\n');
         await saveFile(`data/md/${article.user.id}`, `${article.id}.md`, content);
         return this.articleRepository.save(article);

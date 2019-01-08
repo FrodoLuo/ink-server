@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, UpdateDateColumn, Timestamp } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, UpdateDateColumn} from 'typeorm';
 import { User } from './user.entity';
 @Entity()
 export class Article {
@@ -9,7 +9,7 @@ export class Article {
   title: string;
 
   @UpdateDateColumn()
-  updateDate: Timestamp;
+  updateDate: Date;
 
   @Column({length: 255})
   mdUrl: string;
