@@ -10,8 +10,9 @@ export class DeniedException extends HttpException {
 
 export class ErrorException extends HttpException {
   constructor(err: any) {
+    console.log(err);
     super({
-      message: err,
+      message: err.toString(),
     }, 500);
   }
 }
