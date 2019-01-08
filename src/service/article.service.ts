@@ -20,10 +20,10 @@ export class ArticleService {
       .leftJoinAndSelect('article.user', 'user')
       .where('article.deleted = false');
     if (token) {
-      query = query.where('user.token = :token', { token });
+      query = query.andWhere('user.token = :token', { token });
     }
     if (keyword) {
-      query = query.where('article.tags LIKE :keyword or article.title like :keyword', { keyword: `%${keyword}%` });
+      query = query.andWhere('article.tags LIKE :keyword or article.title like :keyword', { keyword: `%${keyword}%` });
     }
     query = query.orderBy('article.updateDate', 'DESC')
       .skip((page || 0) * 10)
@@ -72,6 +72,7 @@ export class ArticleService {
         await saveFile(`data/md/${article.user.id}`, `${article.id}.md`, content);
         return this.articleRepository.save(article);
       } catch (err) {
+        console.log(err);
         throw new ErrorException(err);
       }
     } else {
