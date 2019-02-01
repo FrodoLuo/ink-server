@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppService } from './app.service';
 import { ArticlesController } from './controller/articles/articles.controller';
 import { CommentsController } from './controller/comments/comments.controller';
+import { MediaController } from './controller/media/media.controller';
 import { ArticleService } from './service/article.service';
 import { UserService } from './service/user.service';
 import { CommentService } from './service/comment.service';
@@ -20,7 +21,7 @@ import { databaseConfig } from './config/database.config';
       Comment,
     ]),
   ],
-  controllers: [ArticlesController, CommentsController, UserController],
+  controllers: [ArticlesController, CommentsController, UserController, MediaController],
   providers: [AppService, ArticleService, UserService, CommentService],
 })
 export class AppModule { }
