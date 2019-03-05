@@ -23,4 +23,7 @@ export class Media {
 
     @ManyToOne(type => User)
     user: User;
+
+    @Column({default: false})
+    deleted: boolean;
 }

@@ -1,4 +1,8 @@
-import { Controller, Get, Query, Param, Post, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Query, Param, Put, Delete, UploadedFiles, UseGuards, UseInterceptors, FilesInterceptor } from '@nestjs/common';
+import { AuthorizationGuard } from 'guard/authorization.guard';
+import { MediaService, IFile } from 'service/media.service';
+import { HeaderValue } from 'decorators/user.decorator';
+import { MulterField } from '@nestjs/common/interfaces/external/multer-options.interface';
 
 export enum SortMethod {
     nameIncrease = 'name',
@@ -11,27 +15,38 @@ export enum SortMethod {
 
 @Controller('media')
 export class MediaController {
+
+    constructor(
+        private mediaService: MediaService,
+    ) { }
+
     @Get()
-    public getMediaList(
-        @Query('start')start: number = 0,
+    @UseGuards(AuthorizationGuard)
+    public async getMediaList(
+        @Query('start') start: number = 0,
         @Query('count') count: number = 10,
         @Query('sort') sort: SortMethod = SortMethod.nameIncrease,
+        @HeaderValue('authorization') token: string,
     ) {
-        return null;
+        return this.mediaService.getFilesByToken(token, start, count, sort);
     }
 
     @Get('/:id')
-    public getMedia(@Param() id: number) {
-        return null;
+    @UseGuards(AuthorizationGuard)
+    public async getMedia(@Param() id: number, @HeaderValue('authorization') token: string) {
+        return this.mediaService.getFileByTokenAndId(token, id);
     }
 
     @Put()
-    public putMedia() {
-        return null;
+    @UseInterceptors(FilesInterceptor('files'))
+    @UseGuards(AuthorizationGuard)
+    public async putMedia(@UploadedFiles() files: IFile[], @HeaderValue('authorization') token: string) {
+        return this.mediaService.saveFiles(files, token);
     }
 
-    @Delete()
-    public deleteMedia() {
-        return null;
+    @Delete('/:id')
+    @UseGuards(AuthorizationGuard)
+    public async deleteMedia(@Param() id: number, @HeaderValue('authorization') token: string) {
+        return this.mediaService.deleteFiles(id, token);
     }
 }

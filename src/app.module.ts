@@ -12,6 +12,8 @@ import { Article } from './entity/article.entity';
 import { User } from './entity/user.entity';
 import { Comment } from './entity/comment.entity';
 import { databaseConfig } from './config/database.config';
+import { MediaService } from './service/media.service';
+import { Media } from 'entity/media.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot(databaseConfig),
@@ -19,9 +21,10 @@ import { databaseConfig } from './config/database.config';
       Article,
       User,
       Comment,
+      Media,
     ]),
   ],
   controllers: [ArticlesController, CommentsController, UserController, MediaController],
-  providers: [AppService, ArticleService, UserService, CommentService],
+  providers: [AppService, ArticleService, UserService, CommentService, MediaService],
 })
 export class AppModule { }
