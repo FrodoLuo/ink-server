@@ -1,7 +1,7 @@
 import { Controller, Get, Query, Param, Put, Delete, UploadedFiles, UseGuards, UseInterceptors, FilesInterceptor } from '@nestjs/common';
-import { AuthorizationGuard } from 'guard/authorization.guard';
-import { MediaService, IFile } from 'service/media.service';
-import { HeaderValue } from 'decorators/user.decorator';
+import { AuthorizationGuard } from '../../guard/authorization.guard';
+import { MediaService, IFile } from '../../service/media.service';
+import { HeaderValue } from '../../decorators/user.decorator';
 import { MulterField } from '@nestjs/common/interfaces/external/multer-options.interface';
 
 export enum SortMethod {

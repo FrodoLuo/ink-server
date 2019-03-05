@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import fs from 'fs';
-import { User } from 'entity/user.entity';
-import { Media } from 'entity/media.entity';
-import { saveFile } from 'utils/file';
+import { Media } from '../entity/media.entity';
+import { saveFile } from '../utils/file';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserService } from './user.service';
-import { NotFoundException, ErrorException } from 'exceptions';
-import { SortMethod } from 'controller/media/media.controller';
+import { ErrorException } from '../exceptions';
+import { SortMethod } from '../controller/media/media.controller';
 
 @Injectable()
 export class MediaService {

@@ -13,7 +13,7 @@ import { User } from './entity/user.entity';
 import { Comment } from './entity/comment.entity';
 import { databaseConfig } from './config/database.config';
 import { MediaService } from './service/media.service';
-import { Media } from 'entity/media.entity';
+import { Media } from './entity/media.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot(databaseConfig),
